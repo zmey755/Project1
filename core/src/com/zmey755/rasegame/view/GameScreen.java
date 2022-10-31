@@ -22,7 +22,7 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
         //путь к файлу относительный из папки асетс строчка .интернал нам об этом говорит
         carTexture = new Texture(Gdx.files.internal("car.jpg"));
-        car = new Car(carTexture,0,0,200,100);
+        car = new Car(carTexture,30,0,200,100);
     }
 
     //рендер время между кадрами в секундах
