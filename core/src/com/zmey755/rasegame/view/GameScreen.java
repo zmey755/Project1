@@ -2,6 +2,7 @@ package com.zmey755.rasegame.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.zmey755.rasegame.model.Car;
@@ -16,13 +17,16 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     //создадим машинку
     private Car car;
+    private OrthographicCamera camera; //инициализируем ортографическую камеру
+    public static float deltacff;
     @Override
     public void show() {
     //инициализируем отрисовщик создав экземпляр класса спрайтбатч
         batch = new SpriteBatch();
         //путь к файлу относительный из папки асетс строчка .интернал нам об этом говорит
         carTexture = new Texture(Gdx.files.internal("car.jpg"));
-        car = new Car(carTexture,0,0,200,100);
+        carTexture.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
+        car = new Car(carTexture,0,0,1f,1f*1.97f);
     }
 
     //рендер время между кадрами в секундах
@@ -31,7 +35,8 @@ public class GameScreen implements Screen {
     //для начала следует очищать экран
        Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+        deltacff = delta;
+        batch.setProjectionMatrix(camera.combined);//применяем матрицу проекции к отрисовщику в цикле чтобы позиция наших обьектов которые мы отрисовываем менялась
         batch.begin();//начало работы отрисовщика
         car.draw(batch);
         batch.end();//конец работы отрисовщика
@@ -40,7 +45,10 @@ public class GameScreen implements Screen {
     //при изменении экрана игры перерисовывается подстраиваясь под экран
     @Override
     public void resize(int width, int height) {
-
+     float aspectRatio = (float) height / width; // соотношение сторон
+        camera = new OrthographicCamera(20f, 20f * aspectRatio); //создадим объект камера
+        //camera.zoom = 0.9f; приближение камеры
+        //camera.update();
     }
 
     //если свернуть игру вызываается этот метод
